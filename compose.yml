@@ -1,0 +1,17 @@
+services:
+  verdaccio:
+    build: .
+    container_name: verdaccio
+    restart: on-failure
+    ports:
+      - "4873:4873"
+    environment:
+      - NODE_ENV=production
+      - VERDACCIO_USERS=alice:password1,bob:password2
+    volumes:
+      - ./verdaccio/verdaccio-storage:/verdaccio/storage
+      - ./verdaccio/verdaccio-conf:/verdaccio/conf
+
+volumes:
+  verdaccio-storage:
+  verdaccio-conf:
