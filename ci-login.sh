@@ -16,6 +16,7 @@ AUTH=$(echo -n "$NPM_USER:$NPM_PASS" | base64 | tr -d '\n')
 cat > .npmrc << EOF
 registry=$NPM_REGISTRY_URL
 //$NPM_REGISTRY/:_auth=$AUTH
+//$NPM_REGISTRY/:email=$NPM_EMAIL
 EOF
 
 echo "✓ Authentication configured for $NPM_REGISTRY"
@@ -36,6 +37,9 @@ npm ping || { echo "✗ Unable to reach registry at $NPM_REGISTRY"; exit 1; }
 echo "✓ Registry is reachable"
 
 
+# Uncomment the following lines to test package installation
+# npm install echo-cli || { echo "✗ npm install failed"; exit 1; }
+# echo "✓ npm install succeeded"
 
 # For CI/CD pipelines (GitHub Actions example):
 
