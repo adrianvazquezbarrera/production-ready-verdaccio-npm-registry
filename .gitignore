@@ -1,5 +1,4 @@
 .npmrc
-verdaccio/npm-config/
 .vscode/
 .idea/
 .DS_Store

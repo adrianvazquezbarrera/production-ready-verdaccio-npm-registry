@@ -1,0 +1,4 @@
+# Ignore all npm configuration files
+*
+# But keep this .gitignore
+!*.gitignore
