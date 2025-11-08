@@ -1,2 +1,11 @@
 .npmrc
 verdaccio/npm-config/
+.vscode/
+.idea/
+.DS_Store
+node_modules/
+dist/
+package-lock.json
+package.json
+yarn.lock
+.env
