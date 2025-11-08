@@ -57,22 +57,35 @@ Use the provided `ci-login.sh` script for automated authentication:
 
 # With custom credentials
 NPM_USER=alice NPM_PASS=password1 NPM_EMAIL=alice@example.com ./ci-login.sh
+
+# With custom registry URL
+NPM_REGISTRY_URL=http://verdaccio:4873 NPM_REGISTRY=verdaccio:4873 ./ci-login.sh
 ```
 
-This creates a `.npmrc` file with base64-encoded credentials.
+This script:
+
+- Creates a `.npmrc` file with base64-encoded credentials
+- Verifies registry connectivity with `npm ping`
+- Warns about potential conflicts with global `~/.npmrc`
+- Provides guidance for initial setup with `npm adduser`
 
 ### GitHub Actions Example
 
 ```yaml
 - name: Authenticate to Verdaccio
   run: |
-    AUTH=$(echo -n "${{ secrets.NPM_USER }}:${{ secrets.NPM_PASS }}" | base64)
+    AUTH=$(echo -n "${{ secrets.NPM_USER }}:${{ secrets.NPM_PASS }}" | base64 | tr -d '\n')
     cat > ~/.npmrc << EOF
     registry=http://localhost:4873
     //localhost:4873/:_auth=$AUTH
     //localhost:4873/:email=ci@example.com
     EOF
+
+- name: Verify Registry Connection
+  run: npm ping
 ```
+
+**Note**: If you encounter authentication issues, you may need to run `npm adduser --registry=http://localhost:4873` once to establish initial connectivity with the registry.
 
 ## 📦 Usage
 

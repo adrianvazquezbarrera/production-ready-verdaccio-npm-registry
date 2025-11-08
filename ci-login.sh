@@ -41,13 +41,3 @@ echo "✓ Registry is reachable"
 # npm install echo-cli || { echo "✗ npm install failed"; exit 1; }
 # echo "✓ npm install succeeded"
 
-# For CI/CD pipelines (GitHub Actions example):
-
-# - name: Authenticate to Verdaccio
-#   run: |
-#     AUTH=$(echo -n "${{ secrets.NPM_USER }}:${{ secrets.NPM_PASS }}" | base64)
-#     cat > ~/.npmrc << EOF
-#     registry=http://localhost:4873
-#     //localhost:4873/:_auth=$AUTH
-#     //localhost:4873/:email=ci@example.com
-#     EOF
