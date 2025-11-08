@@ -20,6 +20,9 @@ EOF
 
 echo "✓ Authentication configured for $NPM_REGISTRY"
 
+npm ping || { echo "✗ Unable to reach registry at $NPM_REGISTRY"; exit 1; }
+echo "✓ Registry is reachable"
+
 
 # For CI/CD pipelines (GitHub Actions example):
 
