@@ -11,7 +11,9 @@ services:
     volumes:
       - ./verdaccio/verdaccio-storage:/verdaccio/storage
       - ./verdaccio/verdaccio-conf:/verdaccio/conf
+      - ./verdaccio/npm-config:/home/verdaccio/.npm
 
 volumes:
   verdaccio-storage:
   verdaccio-conf:
+  npm-config:
