@@ -8,12 +8,12 @@ uplinks:
 
 packages:
   "@*/*":
-    access: $unauthenticated
-    publish: $unauthenticated
+    access: $authenticated
+    publish: $authenticated
     proxy: npmjs
   "**":
-    access: $unauthenticated
-    publish: $unauthenticated
+    access: $authenticated
+    publish: $authenticated
     proxy: npmjs
 
 middlewares:
