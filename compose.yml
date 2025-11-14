@@ -1,16 +1,58 @@
 services:
+  traefik:
+    image: traefik:v3.2
+    container_name: traefik
+    restart: always
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      # - "--certificatesresolvers.myresolver.acme.tlschallenge=true" # <-- Uncomment for HTTPS
+      # - "--certificatesresolvers.myresolver.acme.email=you@example.com"  # <-- Uncomment for HTTPS
+      # - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"  # <-- Uncomment for HTTPS
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # - ./traefik/acme.json:/letsencrypt/acme.json # <-- Uncomment for HTTPS
+      - ./traefik/htpasswd:/etc/traefik/.htpasswd
+
   verdaccio:
-    build: .
+    build: ./verdaccio
     container_name: verdaccio
     restart: on-failure
-    ports:
-      - "4873:4873"
     environment:
       - NODE_ENV=production
-      - VERDACCIO_USERS=alice:password1,bob:password2
     volumes:
       - ./verdaccio/verdaccio-storage:/verdaccio/storage
       - ./verdaccio/verdaccio-conf:/verdaccio/conf
+    labels:
+      - "traefik.enable=true"
+      # HTTP routers
+      - "traefik.http.routers.verdaccio-web.rule=Host(`localhost`)"
+      - "traefik.http.routers.verdaccio-web.priority=1"
+      - "traefik.http.routers.verdaccio-api-http.entrypoints=web"
+      - "traefik.http.routers.verdaccio-api-http.rule=Host(`localhost`) && (PathPrefix(`/-/npm`) || PathPrefix(`/-/user`) || PathPrefix(`/-/package`) || PathPrefix(`/-/whoami`) || PathPrefix(`/-/verdaccio`))"
+      - "traefik.http.routers.verdaccio-api-http.middlewares=verdaccio-auth"
+      - "traefik.http.routers.verdaccio-api-http.priority=100"
+      - "traefik.http.routers.verdaccio-web.entrypoints=web"
+      # HTTPS routers
+      - "traefik.http.routers.verdaccio-api.entrypoints=websecure"
+      - "traefik.http.routers.verdaccio-api.rule=Host(`localhost`) && (PathPrefix(`/-/npm`) || PathPrefix(`/-/user`) || PathPrefix(`/-/package`) || PathPrefix(`/-/whoami`) || PathPrefix(`/-/verdaccio`))"
+      - "traefik.http.routers.verdaccio-api.middlewares=verdaccio-auth" # Apply authentication to API routes
+      - "traefik.http.routers.verdaccio-api.priority=100" # Higher priority for API routes
+      # Panel router for HTTPS (no auth for UI)
+      - "traefik.http.routers.verdaccio-panel.entrypoints=websecure"
+      - "traefik.http.routers.verdaccio-panel.rule=Host(`localhost`)"
+      - "traefik.http.routers.verdaccio-panel.priority=1"
+      # Service
+      - "traefik.http.services.verdaccio.loadbalancer.server.port=4873"
+      # Middlewares
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https" # Redirect HTTP to HTTPS
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=false" # 301 redirect
+      - "traefik.http.middlewares.verdaccio-auth.basicauth.usersfile=/etc/traefik/.htpasswd"
 
 volumes:
   verdaccio-storage:
