@@ -16,11 +16,6 @@ packages:
     publish: $authenticated
     proxy: npmjs
 
-auth:
-  htpasswd:
-    file: /verdaccio/conf/htpasswd
-    max_users: 1000
-
 middlewares:
   audit:
     enabled: true
