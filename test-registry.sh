@@ -75,3 +75,4 @@ echo "✓ All tests passed successfully."
 # Clean up
 cd "$CURRENT_DIR" && rm -rf ./tmp
 rm -rf ./verdaccio/verdaccio-storage/@test*
+exit 0
