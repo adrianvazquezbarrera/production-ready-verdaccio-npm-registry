@@ -44,7 +44,7 @@ The setup consists of two main services:
    Edit `compose.yml` and replace `localhost` with your actual domain:
 
    ```yaml
-   - "traefik.http.routers.verdaccio-api.rule=Host(`registry.example.com`) && Method(`PUT`) || Method(`DELETE`) || Method(`POST`) || Method(`PATCH`)"
+   - "traefik.http.routers.verdaccio-api.rule=Host(`registry.example.com`) && (Method(`PUT`) || Method(`DELETE`) || Method(`POST`) || Method(`PATCH`))"
    - "traefik.http.routers.verdaccio-panel.rule=Host(`registry.example.com`)"
    ```
 
