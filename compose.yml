@@ -38,7 +38,7 @@ services:
       # HTTPS routers - API with BasicAuth for write methods
       # - "traefik.http.routers.verdaccio-api.entrypoints=websecure" # <-- Uncomment for HTTPS
       - "traefik.http.routers.verdaccio-api.entrypoints=web" # <-- Comment out for HTTPS
-      - "traefik.http.routers.verdaccio-api.rule=Host(`localhost`) && Method(`PUT`) || Method(`DELETE`) || Method(`POST`) || Method(`PATCH`)"
+      - "traefik.http.routers.verdaccio-api.rule=Host(`localhost`) && (Method(`PUT`) || Method(`DELETE`) || Method(`POST`) || Method(`PATCH`))"
       - "traefik.http.routers.verdaccio-api.middlewares=verdaccio-auth"
       - "traefik.http.routers.verdaccio-api.priority=100"
       # Panel router for HTTPS (no auth for UI and GET requests)
