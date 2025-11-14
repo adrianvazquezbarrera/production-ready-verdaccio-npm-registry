@@ -384,11 +384,11 @@ docker compose up -d
    - An internal network with firewall rules
    - A cloud provider's private network (AWS VPC, Azure VNet, etc.)
    - IP allowlisting in Traefik if VPN is not an option
-6. **No direct Verdaccio access** - Ensure Verdaccio is only accessible through Traefik
-7. **Public read access** - Anyone can download packages; only writes are protected
-8. **Regular backups** - Backup storage and configuration regularly
-9. **Monitor logs** - Check `docker compose logs` for suspicious activity
-10. **Update regularly** - Keep Docker images up to date
+8. **No direct Verdaccio access** - Ensure Verdaccio is only accessible through Traefik
+9. **Public read access** - Anyone can download packages; only writes are protected
+10. **Regular backups** - Backup storage and configuration regularly
+11. **Monitor logs** - Check `docker compose logs` for suspicious activity
+12. **Update regularly** - Keep Docker images up to date
 
 ## 🐛 Troubleshooting
 
